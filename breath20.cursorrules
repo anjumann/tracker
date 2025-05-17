@@ -1,0 +1,59 @@
+# Project Coding Rules for breath20
+
+1. **Component Usage**
+   - Always use shadcn/ui components from `src/components/ui` for all UI elements. Do not create custom UI components unless absolutely necessary and not available in shadcn/ui.
+   - If you need to extend or customize a shadcn/ui component, do so by composition or by wrapping, not by direct modification.
+
+2. **Terminal Commands**
+   - When installing dependencies or running npm/yarn/pnpm commands that modify dependencies, always use `--legacy-peer-deps` or `--force` to avoid peer dependency conflicts.
+   - Example: `npm install <package> --legacy-peer-deps` or `npm install <package> --force`
+
+3. **Responsiveness**
+   - All UI must be fully responsive. Use Tailwind CSS responsive utilities and test on multiple screen sizes.
+   - Use the `useIsMobile` hook from `src/hooks/use-mobile.ts` for mobile-specific logic.
+
+4. **Code Splitting**
+   - Always use dynamic imports (`next/dynamic`) for large or rarely used components/pages to enable code splitting and improve performance.
+   - Split code at logical boundaries (e.g., feature modules, large components).
+
+5. **DRY Principle**
+   - Strictly follow the DRY (Don't Repeat Yourself) principle. If you find yourself duplicating logic, extract it into a reusable function or component.
+   - Place all reusable logic (helpers, utilities, hooks) in the `src/lib` or `src/hooks` folder as appropriate.
+
+6. **File Organization**
+   - Place all reusable UI components in `src/components/ui`.
+   - Place all reusable logic in `src/lib`.
+   - Place all custom hooks in `src/hooks`.
+   - Feature-specific components should be placed in their respective feature folders under `src/app`.
+
+7. **Accessibility**
+   - All components must be accessible (a11y). Use semantic HTML, ARIA attributes, and ensure keyboard navigation works.
+   - Prefer shadcn/ui components as they are built with accessibility in mind.
+
+8. **Styling**
+   - Use Tailwind CSS for all styling. Do not use inline styles or CSS modules unless absolutely necessary.
+   - Use only the color variables and design tokens defined in `globals.css`.
+
+9. **TypeScript**
+   - All code must be written in TypeScript. No `any` types unless absolutely unavoidable (and must be documented).
+   - Use strict typing and leverage types/interfaces for all props and function signatures.
+
+10. **Linting & Formatting**
+    - Always run `npm run lint` before committing code. Fix all lint errors and warnings.
+    - Follow the ESLint and Prettier configuration provided in the project.
+
+11. **Testing**
+    - If adding new logic or components, write unit tests where possible. Prefer testing hooks and utilities in isolation.
+
+12. **General Best Practices**
+    - Always ask if a new rule or convention could improve the coding experience and add it here.
+    - Keep code clean, readable, and well-documented.
+    - Use meaningful commit messages.
+    - Remove unused code, imports, and dependencies regularly.
+    - Avoid large files; split logic into smaller, focused files.
+    - Prefer composition over inheritance.
+    - Use environment variables for configuration, not hardcoded values.
+
+---
+
+> **Note:** If you encounter a situation not covered by these rules, ask for clarification or propose a new rule to be added.
