@@ -1,3 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
 # Project Coding Rules for breath20
 
 1. **Component Usage**
@@ -41,9 +46,6 @@
 10. **Linting & Formatting**
     - Always run `npm run lint` before committing code. Fix all lint errors and warnings.
     - Follow the ESLint and Prettier configuration provided in the project.
-
-11. **Testing**
-    - If adding new logic or components, write unit tests where possible. Prefer testing hooks and utilities in isolation.
 
 12. **General Best Practices**
     - Always ask if a new rule or convention could improve the coding experience and add it here.
