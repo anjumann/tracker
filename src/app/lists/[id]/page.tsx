@@ -6,13 +6,12 @@ import { Progress } from "@/components/ui/progress";
 import { Edit, Trash } from "lucide-react";
 import { TaskClient } from "@/components/sections/task-client";
 
-interface ListDetailPageProps {
-  params: {
-    id: string;
-  };
-}
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
-export default function ListDetailPage({ params }: ListDetailPageProps) {
+export default function ListDetailPage({ params }: Props) {
   const listId = params.id;
   // Find the list by ID
   const list = DUMMY_LISTS.find((list) => list.id === listId);

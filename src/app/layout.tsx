@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/sections/theme-provider";
 import { APP_NAME } from "@/constant";
 import { MainSidebar } from "@/components/sections/MainSidebar";
 import { ModeToggle } from "@/components/sections/mode-toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const fredoka = localFont({
   src: [
