@@ -80,9 +80,8 @@ export function TaskClient({ listId, tasks }: TaskClientProps) {
 
   return (
     <>
-
-      <div className="space-y-4">
-        <div className="flex items-center justify-between gap-2 my-4">
+      <div className="px-6 py-8 space-y-6">
+        <div className="flex items-center justify-between gap-4 my-6">
           <h2 className="text-2xl font-semibold">Tasks</h2>
           <CreateTaskDialog
             onCreateTask={handleCreateTask}
@@ -96,18 +95,18 @@ export function TaskClient({ listId, tasks }: TaskClientProps) {
           />
         </div>
 
-
         {tasks.length > 0 ? (
-          tasks.map(task => {
+          tasks.map((task, idx) => {
             const hasSubtasks = task.hasSubtasks;
             const isExpanded = expandedTasks[task.id] || false;
             const isLoading = loadingSubtasks[task.id] || false;
             const taskSubtasks = subtasks[task.id] || [];
+            const isLast = idx === tasks.length - 1;
 
             return (
-              <Card key={task.id} className="overflow-hidden">
-                <div className="p-4 flex items-center justify-between hover:bg-muted/50">
-                  <div className="flex items-center gap-3">
+              <Card key={task.id} className={`overflow-hidden${isLast ? ' mb-8' : ''}`}>
+                <div className="p-6 flex items-center justify-between gap-4 hover:bg-muted/50">
+                  <div className="flex items-center gap-4">
                     <Checkbox id={`task-${task.id}`} checked={task.completed} />
                     <div>
                       <label
@@ -122,7 +121,7 @@ export function TaskClient({ listId, tasks }: TaskClientProps) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-4">
                     <Badge variant={
                       task.priority === 'high'
                         ? "destructive"
@@ -151,7 +150,7 @@ export function TaskClient({ listId, tasks }: TaskClientProps) {
 
                 {/* Subtasks */}
                 {isExpanded && (
-                  <div className="border-t pl-12 bg-muted/30">
+                  <div className="border-t pl-16 bg-muted/30">
                     {isLoading ? (
                       <div className="py-4 text-center text-sm text-muted-foreground">
                         Loading subtasks...
@@ -161,9 +160,9 @@ export function TaskClient({ listId, tasks }: TaskClientProps) {
                         {taskSubtasks.map(subtask => (
                           <div
                             key={subtask.id}
-                            className="py-2 px-4 flex items-center justify-between hover:bg-muted/50"
+                            className="py-2 px-4 flex items-center justify-between gap-4 hover:bg-muted/50"
                           >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-4">
                               <Checkbox
                                 id={`subtask-${subtask.id}`}
                                 checked={subtask.completed}
@@ -216,14 +215,14 @@ export function TaskClient({ listId, tasks }: TaskClientProps) {
             );
           })
         ) : (
-          <Card>
-            <CardContent className="pt-6 text-center">
+          <Card className="mb-8">
+            <CardContent className="pt-8 text-center">
               <p className="text-muted-foreground">No tasks in this list yet.</p>
               <CreateTaskDialog
                 onCreateTask={handleCreateTask}
                 listId={listId}
                 trigger={
-                  <Button className="mt-4">
+                  <Button className="mt-6">
                     <Plus className="mr-2 h-4 w-4" />
                     Create Your First Task
                   </Button>
