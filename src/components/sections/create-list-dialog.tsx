@@ -50,39 +50,37 @@ export function CreateListDialog({ onCreateList, trigger }: CreateListDialogProp
         <DialogHeader>
           <DialogTitle>Create New List</DialogTitle>
           <DialogDescription>
-            Create a new list to organize your tasks. Lists help you group related tasks together.
+            Get organized! Create a new list to group similar tasks together and conquer them one by one.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="title" className="text-sm font-medium text-muted-foreground">
                 Title
               </Label>
               <Input
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="col-span-3"
-                placeholder="Work Projects, Home Renovation, etc."
+                placeholder="Give your list a catchy name!"
                 required
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="description" className="text-sm font-medium text-muted-foreground">
                 Description
               </Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="col-span-3"
-                placeholder="Optional description for your list"
+                placeholder="What kind of tasks will live here? (optional)"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Create List</Button>
+            <Button type="submit">Create Your List</Button>
           </DialogFooter>
         </form>
       </DialogContent>

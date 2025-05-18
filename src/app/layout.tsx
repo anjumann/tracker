@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/sections/theme-provider";
 import { APP_NAME } from "@/constant";
-import Header from "@/components/sections/header";
+import { MainSidebar } from "@/components/sections/MainSidebar";
+import { ModeToggle } from "@/components/sections/mode-toggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,13 +37,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen flex flex-col">
-            
-            <Header />
-            <main className="flex-grow">
-              {children}
-            </main>
-          </div>
+          <MainSidebar>
+            <div className="flex flex-col w-full">
+              <div className="flex justify-end py-2">
+                <ModeToggle />
+              </div>
+              <div className="w-full">
+                {children}
+              </div>
+            </div>
+          </MainSidebar>
         </ThemeProvider>
       </body>
     </html>

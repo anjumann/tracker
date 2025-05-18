@@ -85,74 +85,72 @@ export function CreateTaskDialog({
           <DialogTitle>{isSubtask ? "Create Subtask" : "Create Task"}</DialogTitle>
           <DialogDescription>
             {isSubtask
-              ? "Add a subtask to break down your work into smaller steps."
-              : "Create a new task to track your work."}
+              ? "Break down your big tasks into bite-sized pieces. Small steps lead to big wins!"
+              : "Ready to conquer your day? Add a new task and take one step closer to your goals!"}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="title" className="text-sm font-medium text-muted-foreground">
                 Title
               </Label>
               <Input
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="col-span-3"
-                placeholder="Enter task title"
+                placeholder="What awesome thing are you planning to do?"
                 required
               />
             </div>
 
             {!isSubtask && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="description" className="text-sm font-medium text-muted-foreground">
                   Description
                 </Label>
                 <Textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="col-span-3"
-                  placeholder="Optional task description"
+                  placeholder="Add some details to help your future self remember what this is all about"
                 />
               </div>
             )}
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="priority" className="text-right">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="priority" className="text-sm font-medium text-muted-foreground">
                 Priority
               </Label>
               <Select
                 value={priority}
                 onValueChange={(value) => setPriority(value as Priority)}
               >
-                <SelectTrigger id="priority" className="col-span-3">
-                  <SelectValue placeholder="Select priority" />
+                <SelectTrigger id="priority">
+                  <SelectValue placeholder="How important is this?" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="high">High - Needs attention ASAP!</SelectItem>
+                  <SelectItem value="medium">Medium - Important but can wait</SelectItem>
+                  <SelectItem value="low">Low - No rush, whenever you get to it</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             {!isSubtask && !listId && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="list" className="text-right">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="list" className="text-sm font-medium text-muted-foreground">
                   List
                 </Label>
                 <Select
                   value={selectedListId}
                   onValueChange={setSelectedListId}
                 >
-                  <SelectTrigger id="list" className="col-span-3">
-                    <SelectValue placeholder="Select a list (optional)" />
+                  <SelectTrigger id="list">
+                    <SelectValue placeholder="Where should this task live?" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="independent">Independent Task</SelectItem>
+                    <SelectItem value="independent">Independent Task - Free as a bird!</SelectItem>
                     {DUMMY_LISTS.map((list) => (
                       <SelectItem key={list.id} value={list.id}>
                         {list.title}
@@ -164,7 +162,9 @@ export function CreateTaskDialog({
             )}
           </div>
           <DialogFooter>
-            <Button type="submit">Create {isSubtask ? "Subtask" : "Task"}</Button>
+            <Button type="submit">
+              {isSubtask ? "Add Subtask" : "Let's Do This!"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

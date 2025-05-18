@@ -1,6 +1,5 @@
 "use client"
 import { DUMMY_LISTS, DUMMY_TASKS, getIndependentTasks, calculateListProgress } from "@/constant";
-import { APP_NAME } from "@/constant";
 import { HomeClient } from "@/components/sections/home-client";
 import { Suspense } from "react";
 import { CreateTaskDialog } from "@/components/sections/create-task-dialog";
@@ -31,23 +30,22 @@ export default  function Home() {
   
   
   return (
-    <div className="container mx-auto py-8">
-      <div className="flex justify-between items-center">   
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold">{APP_NAME} Dashboard</h1>
+    <div className="p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">   
+        <header>
+          <h1 className="text-3xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground">Manage your tasks and projects in one place</p>
-      </header>
+        </header>
 
-      <CreateTaskDialog 
-            onCreateTask={(data: TaskData)=>{console.log(data)}} 
-            trigger={
-              <Button size="sm">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                New Task
-              </Button>
-            }
-          />
-
+        <CreateTaskDialog 
+          onCreateTask={(data: TaskData)=>{console.log(data)}} 
+          trigger={
+            <Button>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              New Task
+            </Button>
+          }
+        />
       </div>
       <Suspense fallback={<div>Loading dashboard...</div>}>
         <HomeClient 
