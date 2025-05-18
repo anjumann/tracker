@@ -2,6 +2,9 @@
 
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
+import { motion } from "framer-motion"
+import * as AnimationPresets from "@/framer-presets/animation"
+import type { TooltipProps, BarProps, PieProps } from 'recharts'
 
 import { cn } from "@/lib/utils"
 
@@ -342,6 +345,172 @@ function getPayloadConfigFromPayload(
     ? config[configLabelKey]
     : config[key as keyof typeof config]
 }
+
+// --- Animated Chart Elements ---
+// Animated Bar
+const AnimatedBar = ({ x, y, width, height, fill, className, style }: {
+  x?: number; y?: number; width?: number; height?: number; fill?: string; className?: string; style?: React.CSSProperties;
+}) => (
+  <motion.rect
+    x={x}
+    y={y}
+    width={width}
+    height={height}
+    fill={fill}
+    className={className}
+    style={{ ...style, cursor: "pointer" }}
+    variants={AnimationPresets.scale}
+    initial="hidden"
+    animate="visible"
+    exit="exit"
+    whileHover={{ scale: 1.08, filter: "brightness(1.1)" }}
+    whileTap={{ scale: 0.96 }}
+  />
+)
+
+// Animated Pie Slice
+
+// Animated Line (for entrance)
+
+// --- Chart Components ---
+// Example for BarChart
+export function AnimatedBarChart({ 
+  data, 
+  config, 
+  ...props 
+}: {
+  data: Array<Record<string, any>>;
+  config: ChartConfig;
+  [key: string]: any;
+}) {
+  return (
+    <ChartContainer config={config} {...props}>
+      <RechartsPrimitive.BarChart data={data} {...props}>
+        <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
+        <RechartsPrimitive.XAxis dataKey="name" />
+        <RechartsPrimitive.YAxis />
+        <RechartsPrimitive.Tooltip content={<AnimatedTooltipWrapper />} />
+        <RechartsPrimitive.Legend content={<AnimatedLegend />} />
+        {Object.keys(config).map((key) => (
+          <RechartsPrimitive.Bar
+            key={key}
+            dataKey={key}
+            fill={`var(--color-${key})`}
+            shape={(props: any) => <AnimatedBar {...props} />}
+          />
+        ))}
+      </RechartsPrimitive.BarChart>
+    </ChartContainer>
+  )
+}
+
+// Example for Pie/Donut Chart
+export function AnimatedDonutChart({ 
+  data, 
+  config, 
+  ...props 
+}: {
+  data: Array<{name: string; value: number}>;
+  config: ChartConfig;
+  [key: string]: any;
+}) {
+  return (
+    <ChartContainer config={config} {...props}>
+      <RechartsPrimitive.PieChart {...props}>
+        <RechartsPrimitive.Tooltip content={<AnimatedTooltipWrapper />} />
+        <RechartsPrimitive.Legend content={<AnimatedLegend />} />
+        <RechartsPrimitive.Pie
+          data={data}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          innerRadius={60}
+          outerRadius={80}
+          fill="var(--color-chart-1)"
+          isAnimationActive={false}
+        >
+          {data.map((entry, idx: number) => (
+            <RechartsPrimitive.Cell 
+              key={`cell-${idx}`}
+              fill={`var(--color-chart-${(idx % 5) + 1})`}
+            />
+          ))}
+        </RechartsPrimitive.Pie>
+      </RechartsPrimitive.PieChart>
+    </ChartContainer>
+  )
+}
+
+// Example for LineChart
+export function AnimatedLineChart({ 
+  data, 
+  config, 
+  ...props 
+}: {
+  data: Array<Record<string, any>>;
+  config: ChartConfig;
+  [key: string]: any;
+}) {
+  return (
+    <ChartContainer config={config} {...props}>
+      <RechartsPrimitive.LineChart data={data} {...props}>
+        <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" />
+        <RechartsPrimitive.XAxis dataKey="name" />
+        <RechartsPrimitive.YAxis />
+        <RechartsPrimitive.Tooltip content={<AnimatedTooltipWrapper />} />
+        <RechartsPrimitive.Legend content={<AnimatedLegend />} />
+        {Object.keys(config).map((key) => (
+          <RechartsPrimitive.Line
+            key={key}
+            type="monotone"
+            dataKey={key}
+            stroke={`var(--color-${key})`}
+            dot={false}
+            activeDot={{ r: 8 }}
+          />
+        ))}
+      </RechartsPrimitive.LineChart>
+    </ChartContainer>
+  )
+}
+
+// --- Animated Tooltip and Legend ---
+// Wrapper to fix type issues with TooltipProps
+const AnimatedTooltipWrapper = (props: TooltipProps<any, any>) => (
+  <AnimatedTooltip>
+    <ChartTooltipContent 
+      active={props.active}
+      payload={props.payload}
+      label={props.label}
+    />
+  </AnimatedTooltip>
+)
+
+const AnimatedTooltip = ({ children }: { children: React.ReactNode }) => (
+  <motion.div
+    variants={AnimationPresets.fade}
+    initial="hidden"
+    animate="visible"
+    exit="exit"
+    transition={{ duration: 0.2 }}
+    style={{ pointerEvents: "auto" }}
+  >
+    {children}
+  </motion.div>
+)
+
+const AnimatedLegend = (props: React.ComponentProps<typeof ChartLegendContent>) => (
+  <motion.div
+    variants={AnimationPresets.staggerContainer(0.07)}
+    initial="hidden"
+    animate="visible"
+    exit="exit"
+    className="flex items-center gap-2"
+  >
+    <ChartLegendContent {...props} />
+  </motion.div>
+)
 
 export {
   ChartContainer,

@@ -88,11 +88,11 @@ export function MainSidebar({ children }: { children: React.ReactNode }) {
           <SidebarFooter className="border-t border-sidebar-border mt-auto">
             <div className="flex items-center gap-3 p-4">
               <Avatar>
-                <AvatarImage src="/images/avatar.png" alt="User" />
+                <AvatarImage src="/images/beru.jpg" alt="User" />
                 <AvatarFallback>US</AvatarFallback>
               </Avatar>
               <div className="flex flex-col overflow-hidden">
-                <span className="text-sm font-medium truncate">User Name</span>
+                <span className="text-sm font-medium truncate">Beru</span>
                 <span className="text-xs text-muted-foreground truncate">user@example.com</span>
               </div>
             </div>

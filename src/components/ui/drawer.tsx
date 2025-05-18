@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
+import { motion, AnimatePresence, HTMLMotionProps } from "framer-motion"
+import * as AnimationPresets from "@/framer-presets/animation"
 
 import { cn } from "@/lib/utils"
 
@@ -37,7 +39,7 @@ function DrawerOverlay({
     <DrawerPrimitive.Overlay
       data-slot="drawer-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50 backdrop-blur-[1px]",
         className
       )}
       {...props}
@@ -53,40 +55,64 @@ function DrawerContent({
   return (
     <DrawerPortal data-slot="drawer-portal">
       <DrawerOverlay />
-      <DrawerPrimitive.Content
-        data-slot="drawer-content"
-        className={cn(
-          "group/drawer-content bg-background fixed z-50 flex h-auto flex-col",
-          "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80vh] data-[vaul-drawer-direction=top]:rounded-b-lg data-[vaul-drawer-direction=top]:border-b",
-          "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80vh] data-[vaul-drawer-direction=bottom]:rounded-t-lg data-[vaul-drawer-direction=bottom]:border-t",
-          "data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=right]:sm:max-w-sm",
-          "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm",
-          className
-        )}
-        {...props}
-      >
-        <div className="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
-        {children}
-      </DrawerPrimitive.Content>
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          <DrawerPrimitive.Content
+            data-slot="drawer-content"
+            className={cn(
+              "group/drawer-content bg-background fixed z-50 flex h-auto flex-col shadow-xl",
+              "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[85vh] data-[vaul-drawer-direction=top]:rounded-b-lg data-[vaul-drawer-direction=top]:border-b",
+              "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[85vh] data-[vaul-drawer-direction=bottom]:rounded-t-lg data-[vaul-drawer-direction=bottom]:border-t",
+              "data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-4/5 data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=right]:sm:max-w-sm",
+              "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-4/5 data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm",
+              className
+            )}
+            {...props}
+          >
+            <div className="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+            <motion.div
+              variants={AnimationPresets.staggerContainer(0.1)}
+              initial="hidden"
+              animate="visible"
+              className="flex h-full w-full flex-col"
+            >
+              {children}
+            </motion.div>
+          </DrawerPrimitive.Content>
+        </motion.div>
+      </AnimatePresence>
     </DrawerPortal>
   )
 }
 
-function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
+function DrawerHeader({
+  className,
+  ...props
+}: HTMLMotionProps<"div">) {
   return (
-    <div
+    <motion.div
+      variants={AnimationPresets.slideDown}
       data-slot="drawer-header"
-      className={cn("flex flex-col gap-1.5 p-4", className)}
+      className={cn("flex flex-col gap-1.5 p-5", className)}
       {...props}
     />
   )
 }
 
-function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
+function DrawerFooter({
+  className,
+  ...props
+}: HTMLMotionProps<"div">) {
   return (
-    <div
+    <motion.div
+      variants={AnimationPresets.slideUp}
       data-slot="drawer-footer"
-      className={cn("mt-auto flex flex-col gap-2 p-4", className)}
+      className={cn("mt-auto flex flex-col gap-3 p-5", className)}
       {...props}
     />
   )
@@ -99,7 +125,7 @@ function DrawerTitle({
   return (
     <DrawerPrimitive.Title
       data-slot="drawer-title"
-      className={cn("text-foreground font-semibold", className)}
+      className={cn("text-foreground text-lg font-semibold", className)}
       {...props}
     />
   )

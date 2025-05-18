@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/sections/theme-provider";
 import { APP_NAME } from "@/constant";
 import { MainSidebar } from "@/components/sections/MainSidebar";
 import { ModeToggle } from "@/components/sections/mode-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui";
 
 const fredoka = localFont({
   src: [
@@ -55,6 +56,10 @@ export default function RootLayout({
             <div className="flex flex-col w-full">
               <div className="flex justify-end py-2">
                 <ModeToggle />
+                <Avatar>
+                <AvatarImage src="/images/beru.jpg" alt="User" />
+                <AvatarFallback>US</AvatarFallback>
+              </Avatar>
               </div>
               <div className="w-full">
                 {children}
