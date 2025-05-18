@@ -1,19 +1,33 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/sections/theme-provider";
 import { APP_NAME } from "@/constant";
 import { MainSidebar } from "@/components/sections/MainSidebar";
 import { ModeToggle } from "@/components/sections/mode-toggle";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const fredoka = localFont({
+  src: [
+    {
+      path: "../fonts/Fredoka-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-fredoka",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const walterTurncoat = localFont({
+  src: [
+    {
+      path: "../fonts/WalterTurncoat-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-walter-turncoat",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -29,11 +43,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${fredoka.variable} ${walterTurncoat.variable} antialiased font-walter-turncoat font-fredoka`}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

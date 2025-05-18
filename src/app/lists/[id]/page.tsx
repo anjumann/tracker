@@ -12,50 +12,46 @@ interface ListDetailPageProps {
   };
 }
 
-
-export default  function ListDetailPage({ params }: ListDetailPageProps) {
+export default function ListDetailPage({ params }: ListDetailPageProps) {
   const listId = params.id;
-  
   // Find the list by ID
-  const list = DUMMY_LISTS.find(list => list.id === listId);
-  
+  const list = DUMMY_LISTS.find((list) => list.id === listId);
   if (!list) {
     // Handle missing list server-side
     return <div>List not found</div>;
   }
-
   // Get all top-level tasks for this list
-  const tasks =  getTasksForList(listId);
-  
+  const tasks = getTasksForList(listId);
   // Calculate progress
-  const progress =  calculateListProgress(listId);
-  
+  const progress = calculateListProgress(listId);
+
   return (
-    <div className="container mx-auto py-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="container mx-auto py-4 px-2 md:px-6">
+      {/* Header: Title, Description, Actions */}
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-2 mb-3">
         <div>
-          <h1 className="text-3xl font-bold">{list.title}</h1>
-          <p className="text-muted-foreground">{list.description}</p>
+          <h1 className="text-3xl font-bold mb-0.5">{list.title}</h1>
+          <p className="text-muted-foreground text-base leading-tight">{list.description}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1 self-start md:self-auto">
           <Button variant="outline" size="sm">
-            <Edit className="mr-2 h-4 w-4" />
+            <Edit className="mr-1 h-4 w-4" />
             Edit List
           </Button>
           <Button variant="destructive" size="sm">
-            <Trash className="mr-2 h-4 w-4" />
+            <Trash className="mr-1 h-4 w-4" />
             Delete
           </Button>
         </div>
       </div>
-      
+
       {/* Progress Section */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Progress</CardTitle>
+      <Card className="mb-4 w-full">
+        <CardHeader className="py-2 px-4">
+          <CardTitle className="text-lg">Progress</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
+        <CardContent className="py-2 px-4">
+          <div className="space-y-1">
             <div className="flex justify-between text-sm">
               <span>Completion</span>
               <span>{progress}%</span>
@@ -64,10 +60,10 @@ export default  function ListDetailPage({ params }: ListDetailPageProps) {
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Tasks Section */}
-      <div className="mb-6 flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Tasks</h2>
+      <div className="mb-2">
+     
         <Suspense fallback={<div>Loading...</div>}>
           <TaskClient listId={listId} tasks={tasks} />
         </Suspense>

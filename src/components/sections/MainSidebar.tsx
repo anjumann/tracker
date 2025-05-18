@@ -3,6 +3,8 @@
 import * as React from "react"
 import Link from "next/link"
 import { HomeIcon, LayoutDashboardIcon, ListIcon } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -21,6 +23,7 @@ import { getListsForUser } from "@/constant"
 
 export function MainSidebar({ children }: { children: React.ReactNode }) {
   const lists =  getListsForUser()
+  const pathname = usePathname();
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -34,7 +37,7 @@ export function MainSidebar({ children }: { children: React.ReactNode }) {
           <SidebarContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive tooltip="Home">
+                <SidebarMenuButton asChild isActive={pathname === "/"} tooltip="Home">
                   <Link href="/">
                     <HomeIcon className="mr-2" />
                     <span>Home</span>
@@ -42,7 +45,7 @@ export function MainSidebar({ children }: { children: React.ReactNode }) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Analytics">
+                <SidebarMenuButton asChild isActive={pathname === "/analytics"} tooltip="Analytics">
                   <Link href="/analytics">
                     <LayoutDashboardIcon className="mr-2" />
                     <span>Analytics</span>
@@ -58,17 +61,24 @@ export function MainSidebar({ children }: { children: React.ReactNode }) {
               </div>
               <ul className="space-y-1 px-2">
                 {lists.length > 0 ? (
-                  lists.map((list) => (
-                    <li key={list.id}>
-                      <Link
-                        href={`/lists/${list.id}`}
-                        className="flex items-center justify-between py-2 px-3 hover:bg-muted rounded-md transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
-                        aria-label={`Go to list ${list.title}`}
-                      >
-                        <span className="truncate">{list.title}</span>
-                      </Link>
-                    </li>
-                  ))
+                  lists.map((list) => {
+                    const listPath = `/lists/${list.id}`;
+                    const isActive = pathname === listPath;
+                    return (
+                      <li key={list.id}>
+                        <Link
+                          href={listPath}
+                          className={cn(
+                            "flex items-center justify-between py-2 px-3 hover:bg-muted rounded-md transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary",
+                            isActive && "bg-muted"
+                          )}
+                          aria-label={`Go to list ${list.title}`}
+                        >
+                          <span className="truncate">{list.title}</span>
+                        </Link>
+                      </li>
+                    );
+                  })
                 ) : (
                   <li className="text-xs text-muted-foreground px-3 py-2">No lists available</li>
                 )}

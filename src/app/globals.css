@@ -36,8 +36,8 @@
   --sidebar-accent-foreground: rgb(26, 34, 56);
   --sidebar-border: rgb(176, 184, 193);
   --sidebar-ring: rgb(247, 200, 115);
-  --font-sans: Space Mono, monospace;
-  --font-serif: Space Grotesk, serif;
+  --font-sans: var(--font-fredoka), sans-serif;
+  --font-serif: var(--font-walter-turncoat), cursive;
   --font-mono: Open Sans, sans-serif;
   --radius: 0.5rem;
   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
@@ -83,8 +83,8 @@
   --sidebar-accent-foreground: rgb(35, 36, 58);
   --sidebar-border: rgb(45, 46, 62);
   --sidebar-ring: rgb(255, 224, 102);
-  --font-sans: Space Mono, monospace;
-  --font-serif: Space Grotesk, serif;
+  --font-sans: var(--font-fredoka), sans-serif;
+  --font-serif: var(--font-walter-turncoat), cursive;
   --font-mono: Open Sans, sans-serif;
   --radius: 0.5rem;
   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
