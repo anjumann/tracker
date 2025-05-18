@@ -3,7 +3,8 @@ import { Suspense } from "react";
 import { AnalyticsClient } from "@/components/sections/analytics-client";
 
 export default async function AnalyticsPage() {
-  const stats = DUMMY_STATISTICS;
+  // Select a specific user's statistics (using user1 as an example)
+  const stats = DUMMY_STATISTICS["user1"];
   
   // Get active lists
   const activeLists = DUMMY_LISTS.filter(list => stats.activeListIds.includes(list.id));

@@ -12,20 +12,12 @@ interface ListDetailPageProps {
   };
 }
 
-interface TaskData {
-  title: string;
-  description?: string;
-  priority: string;
-  dueDate?: string;
-  listId: string;
-  parentTaskId?: string;
-}
 
-export default async function ListDetailPage({ params }: ListDetailPageProps) {
+export default  function ListDetailPage({ params }: ListDetailPageProps) {
   const listId = params.id;
   
   // Find the list by ID
-  const list = await DUMMY_LISTS.find(list => list.id === listId);
+  const list = DUMMY_LISTS.find(list => list.id === listId);
   
   if (!list) {
     // Handle missing list server-side
@@ -33,10 +25,10 @@ export default async function ListDetailPage({ params }: ListDetailPageProps) {
   }
 
   // Get all top-level tasks for this list
-  const tasks = await getTasksForList(listId);
+  const tasks =  getTasksForList(listId);
   
   // Calculate progress
-  const progress = await calculateListProgress(listId);
+  const progress =  calculateListProgress(listId);
   
   return (
     <div className="container mx-auto py-8">

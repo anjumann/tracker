@@ -32,7 +32,7 @@ interface HomeClientProps {
 }
 
 export function HomeClient({ listsWithProgress, independentTasks, tasks }: HomeClientProps) {
-  const [currentView, setCurrentView] = useState<"lists" | "tasks">("lists");
+  const [currentView, setCurrentView] = useState<"lists" | "tasks">("tasks");
   
   // These functions would actually update state or call an API in a real app
   const handleCreateList = (title: string, description: string) => {
@@ -52,52 +52,30 @@ export function HomeClient({ listsWithProgress, independentTasks, tasks }: HomeC
 
       {currentView === "lists" ? (
         <>
-          {/* Lists Section */}
+          {/* Recent Activity Section - simplified version of lists view */}
           <section className="mb-10">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold">Your Lists</h2>
+              <h2 className="text-2xl font-semibold">Recent Activity</h2>
               <CreateListDialog onCreateList={handleCreateList} />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {listsWithProgress.map((list) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+              {listsWithProgress
+                .filter(list => list.progress > 0)
+                .slice(0, 4)
+                .map((list) => (
                 <Card key={list.id} className="h-full">
                   <CardHeader>
                     <CardTitle>{list.title}</CardTitle>
                     <CardDescription>{list.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Progress</span>
-                          <span>{list.progress}%</span>
-                        </div>
-                        <Progress value={list.progress} className="h-2" />
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>Progress</span>
+                        <span>{list.progress}%</span>
                       </div>
-                      
-                      <div>
-                        <h3 className="text-sm font-medium mb-2">Recent Tasks</h3>
-                        <ul className="space-y-1">
-                          {tasks
-                            .filter(task => task.listId === list.id && !task.parentTaskId)
-                            .slice(0, 3)
-                            .map(task => (
-                              <li key={task.id} className="text-sm flex items-center">
-                                <span className={`w-3 h-3 rounded-full mr-2 ${
-                                  task.priority === 'high' 
-                                    ? 'bg-red-500' 
-                                    : task.priority === 'medium' 
-                                      ? 'bg-yellow-500' 
-                                      : 'bg-green-500'
-                                }`} />
-                                <span className={task.completed ? "line-through text-muted-foreground" : ""}>
-                                  {task.title}
-                                </span>
-                              </li>
-                            ))}
-                        </ul>
-                      </div>
+                      <Progress value={list.progress} className="h-2" />
                     </div>
                   </CardContent>
                   <CardFooter>

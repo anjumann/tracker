@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { HomeIcon, LayoutDashboardIcon, SettingsIcon, ListIcon } from "lucide-react"
+import { HomeIcon, LayoutDashboardIcon, ListIcon } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -17,15 +17,17 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from "@/components/ui/sidebar"
+import { getListsForUser } from "@/constant"
 
 export function MainSidebar({ children }: { children: React.ReactNode }) {
+  const lists =  getListsForUser()
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex h-screen w-full overflow-hidden bg-background">
         <Sidebar variant="inset" collapsible="icon">
           <SidebarHeader className="border-b border-sidebar-border">
             <div className="flex items-center gap-2 px-2">
-              <span className="font-semibold text-xl">Tracker</span>
               <SidebarTrigger className="ml-auto" />
             </div>
           </SidebarHeader>
@@ -40,14 +42,6 @@ export function MainSidebar({ children }: { children: React.ReactNode }) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Lists">
-                  <Link href="/lists">
-                    <ListIcon className="mr-2" />
-                    <span>Lists</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Analytics">
                   <Link href="/analytics">
                     <LayoutDashboardIcon className="mr-2" />
@@ -55,15 +49,31 @@ export function MainSidebar({ children }: { children: React.ReactNode }) {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Settings">
-                  <Link href="/settings">
-                    <SettingsIcon className="mr-2" />
-                    <span>Settings</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
+            {/* List of Lists */}
+            <div className="mt-6">
+              <div className="flex items-center gap-2 px-4 mb-2 text-muted-foreground text-xs uppercase tracking-wider">
+                <ListIcon className="h-4 w-4" />
+                Your Lists
+              </div>
+              <ul className="space-y-1 px-2">
+                {lists.length > 0 ? (
+                  lists.map((list) => (
+                    <li key={list.id}>
+                      <Link
+                        href={`/lists/${list.id}`}
+                        className="flex items-center justify-between py-2 px-3 hover:bg-muted rounded-md transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
+                        aria-label={`Go to list ${list.title}`}
+                      >
+                        <span className="truncate">{list.title}</span>
+                      </Link>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-xs text-muted-foreground px-3 py-2">No lists available</li>
+                )}
+              </ul>
+            </div>
           </SidebarContent>
           <SidebarFooter className="border-t border-sidebar-border mt-auto">
             <div className="flex items-center gap-3 p-4">

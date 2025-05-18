@@ -6,14 +6,14 @@ import { CreateTaskDialog } from "@/components/sections/create-task-dialog";
 import { Button } from "@/components/ui";
 import { PlusCircle } from "lucide-react";
 
-export default  function Home() {
+export default function Home() {
   // Get independent tasks not associated with any list
-  const independentTasks =  getIndependentTasks();
+  const independentTasks = getIndependentTasks();
   
   // Pre-calculate progress for all lists
   const listsWithProgress = DUMMY_LISTS.map((list) => ({
     ...list,
-    progress:  calculateListProgress(list.id)
+    progress: calculateListProgress(list.id)
   }));
   
   // Get all tasks including subtasks for the all tasks view
@@ -47,6 +47,8 @@ export default  function Home() {
           }
         />
       </div>
+      
+      
       <Suspense fallback={<div>Loading dashboard...</div>}>
         <HomeClient 
           listsWithProgress={listsWithProgress} 

@@ -17,9 +17,11 @@ interface TaskViewProps {
 
 export function TaskView({ tasks }: TaskViewProps) {
   const [filterPriority, setFilterPriority] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<string>("priority");
+  const [sortBy, setSortBy] = useState<string>("date");
   
   // Handle creating a new task
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCreateTask = (data: any) => {
     console.log("Creating task:", data);
   };

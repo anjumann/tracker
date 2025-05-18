@@ -772,8 +772,8 @@ export const getUserStats = (userId: string): UserStatistics => {
   };
 };
 
-export const getListsForUser = (userId: string): List[] => {
-  return DUMMY_LISTS.filter(list => list.userId === userId);
+export const getListsForUser = (): List[] => {
+  return DUMMY_LISTS
 };
 
 export const getTasksForUser = (userId: string): Task[] => {

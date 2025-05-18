@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -14,16 +13,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { DUMMY_LISTS } from "@/constant";
 import { Priority } from "@/constant/task-manager";
 import { Plus } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface CreateTaskDialogProps {
   onCreateTask?: (data: {
@@ -46,7 +43,8 @@ export function CreateTaskDialog({
   isSubtask = false,
   trigger,
 }: CreateTaskDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [comboboxOpen, setComboboxOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");
@@ -66,12 +64,12 @@ export function CreateTaskDialog({
       setDescription("");
       setPriority("medium");
       if (!isSubtask) setSelectedListId(listId || "independent");
-      setOpen(false);
+      setDialogOpen(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         {trigger || (
           <Button variant={isSubtask ? "ghost" : "default"} size={isSubtask ? "sm" : "default"}>
@@ -83,16 +81,11 @@ export function CreateTaskDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{isSubtask ? "Create Subtask" : "Create Task"}</DialogTitle>
-          <DialogDescription>
-            {isSubtask
-              ? "Break down your big tasks into bite-sized pieces. Small steps lead to big wins!"
-              : "Ready to conquer your day? Add a new task and take one step closer to your goals!"}
-          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="title" className="text-sm font-medium text-muted-foreground">
+              <Label htmlFor="title" className="text-xs font-medium text-muted-foreground">
                 Title
               </Label>
               <Input
@@ -106,7 +99,7 @@ export function CreateTaskDialog({
 
             {!isSubtask && (
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="description" className="text-sm font-medium text-muted-foreground">
+                <Label htmlFor="description" className="text-xs font-medium text-muted-foreground">
                   Description
                 </Label>
                 <Textarea
@@ -119,45 +112,94 @@ export function CreateTaskDialog({
             )}
 
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="priority" className="text-sm font-medium text-muted-foreground">
+              <Label htmlFor="priority" className="text-xs font-medium text-muted-foreground">
                 Priority
               </Label>
-              <Select
+              <ToggleGroup
+                type="single"
                 value={priority}
-                onValueChange={(value) => setPriority(value as Priority)}
+                onValueChange={(value) => value && setPriority(value as Priority)}
+                className="w-full"
+                aria-label="Select priority"
               >
-                <SelectTrigger id="priority">
-                  <SelectValue placeholder="How important is this?" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="high">High - Needs attention ASAP!</SelectItem>
-                  <SelectItem value="medium">Medium - Important but can wait</SelectItem>
-                  <SelectItem value="low">Low - No rush, whenever you get to it</SelectItem>
-                </SelectContent>
-              </Select>
+                <ToggleGroupItem value="high" className="flex-1" aria-label="High priority">
+                  High
+                </ToggleGroupItem>
+                <ToggleGroupItem value="medium" className="flex-1" aria-label="Medium priority">
+                  Medium
+                </ToggleGroupItem>
+                <ToggleGroupItem value="low" className="flex-1" aria-label="Low priority">
+                  Low
+                </ToggleGroupItem>
+              </ToggleGroup>
             </div>
 
             {!isSubtask && !listId && (
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="list" className="text-sm font-medium text-muted-foreground">
+                <Label htmlFor="list" className="text-xs font-medium text-muted-foreground">
                   List
                 </Label>
-                <Select
-                  value={selectedListId}
-                  onValueChange={setSelectedListId}
-                >
-                  <SelectTrigger id="list">
-                    <SelectValue placeholder="Where should this task live?" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="independent">Independent Task - Free as a bird!</SelectItem>
-                    {DUMMY_LISTS.map((list) => (
-                      <SelectItem key={list.id} value={list.id}>
-                        {list.title}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Popover open={comboboxOpen} onOpenChange={setComboboxOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={comboboxOpen}
+                      className="w-full justify-between"
+                      type="button"
+                    >
+                      {selectedListId
+                        ? (selectedListId === "independent"
+                            ? "Independent Task - Free as a bird!"
+                            : DUMMY_LISTS.find((list) => list.id === selectedListId)?.title)
+                        : "Where should this task live?"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search lists..." />
+                      <CommandList>
+                        <CommandEmpty>No list found.</CommandEmpty>
+                        <CommandGroup>
+                          <CommandItem
+                            value="independent"
+                            onSelect={() => {
+                              setSelectedListId("independent");
+                              setComboboxOpen(false);
+                            }}
+                          >
+                            Independent Task - Free as a bird!
+                            <Check
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                selectedListId === "independent" ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                          </CommandItem>
+                          {DUMMY_LISTS.map((list) => (
+                            <CommandItem
+                              key={list.id}
+                              value={list.id}
+                              onSelect={() => {
+                                setSelectedListId(list.id);
+                                setComboboxOpen(false);
+                              }}
+                            >
+                              {list.title}
+                              <Check
+                                className={cn(
+                                  "ml-auto h-4 w-4",
+                                  selectedListId === list.id ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
             )}
           </div>

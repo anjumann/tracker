@@ -42,7 +42,7 @@ interface AnalyticsClientProps {
   activeLists: List[];
 }
 
-export function AnalyticsClient({ stats, activeLists }: AnalyticsClientProps) {
+export function AnalyticsClient({ stats }: AnalyticsClientProps) {
   // Calculate completion percentage
   const completionPercentage = Math.round((stats.completedTasks / stats.totalTasks) * 100);
   
@@ -91,31 +91,7 @@ export function AnalyticsClient({ stats, activeLists }: AnalyticsClientProps) {
         </Card>
       </div>
       
-      {/* Active Lists */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Active Lists</CardTitle>
-          <CardDescription>Your most active project lists</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {activeLists.map(list => {
-              // Get random activity level for demo purposes (between 40-100%)
-              const activityLevel = Math.floor(Math.random() * (100 - 40) + 40);
-              
-              return (
-                <div key={list.id} className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>{list.title}</span>
-                    <span>Activity: {activityLevel}%</span>
-                  </div>
-                  <Progress value={activityLevel} className="h-1.5" />
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+    
     </>
   );
 } 
